@@ -1,2 +1,49 @@
-<h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+<h1 class="text-center mb-5">EC2 Autoscaling Group</h1>
+
+<div class="container">
+    <button type="button" class="btn btn-primary d-flex justify-content-center align-items-center py-3"
+        style="margin-left: auto; margin-right: auto" id="begin-load-test">
+        <div class="spinner-border invisible" role="status" id="loading-spinner">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="ms-4 me-5">
+            Begin Load Test
+        </div>
+    </button>
+</div>
+
+<script>
+    window.addEventListener('load', function () {
+        // Get reference to button and loading spinner
+        const loadTestButton = document.getElementById('begin-load-test');
+        const loadingSpinner = document.getElementById('loading-spinner');
+
+        // Add click listener
+        loadTestButton.addEventListener('click', async function () {
+
+            // Disable button while loading
+            loadTestButton.classList.add('disabled');
+            loadTestButton.setAttribute('disabled', true);
+
+            try {
+                // Show loading spinner
+                loadingSpinner.classList.remove('invisible');
+
+                // Kick off load test
+                await fetch('/load-test', {
+                    method: 'POST',
+                    body: {},
+                });
+            } catch (error) {
+                console.error('ERROR:', error);
+            }
+
+            // Enable button after request is finished
+            loadTestButton.removeAttribute('disabled');
+            loadTestButton.classList.remove('disabled');
+
+            // Hide loading spinner
+            loadingSpinner.classList.add('invisible');
+        });
+    })
+</script>
